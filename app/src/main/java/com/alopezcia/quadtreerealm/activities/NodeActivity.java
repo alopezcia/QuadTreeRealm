@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.alopezcia.quadtreerealm.R;
 import com.alopezcia.quadtreerealm.adapters.QuadTreeNodeAdapter;
 import com.alopezcia.quadtreerealm.models.QuadTree;
+import com.alopezcia.quadtreerealm.models.QuadTreeEntity;
 import com.alopezcia.quadtreerealm.models.QuadTreeNode;
 
 import io.realm.Realm;
@@ -47,8 +48,15 @@ public class NodeActivity extends AppCompatActivity {
             this.setTitle(layerName + " " + parentNode.getTitle());
 
             fab = (FloatingActionButton) findViewById(R.id.fabAddQuadTreeNode);
-            listView = (ListView) findViewById(R.id.listViewQuadTreeNode);
+            fab.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view)
+                {
+                    showAlertForCreatingQuadTreeEntity("New Entity", "Type data for your new Entity");
+                }
+            });
 
+            listView = (ListView) findViewById(R.id.listViewQuadTreeNode);
             adapter = new QuadTreeNodeAdapter(this, quadTreeNodes, R.layout.list_view_quadtreenode_item);
             listView.setAdapter(adapter);
 
@@ -56,31 +64,51 @@ public class NodeActivity extends AppCompatActivity {
         }
     }
 
+    /*** CRUD Actions ***/
+    private void createQuadTreeEntity(int oid, double lat, double lng )
+    {
+        if( parentNode.getExtent().contains(lng, lat))
+        {
+            realm.beginTransaction();
+            QuadTreeEntity entity = new QuadTreeEntity(lat, lng, oid);
+            realm.copyToRealm(entity);
+            parentNode.insert(entity);
+            realm.commitTransaction();
+        }else
+        {
+            Toast.makeText(getApplicationContext(), "Entity out of Node Extent", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /*** Dialogs ***/
-    private void showAlertForCreatingQuadTree(String title, String message )
+    private void showAlertForCreatingQuadTreeEntity(String title, String message )
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if( title != null ) builder.setTitle(title);
         if( message != null) builder.setMessage(message);
 
-        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_create_quadtree, null);
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_create_entity, null);
         builder.setView(viewInflated);
 
-        final EditText input = (EditText) viewInflated.findViewById(R.id.editTextNewQuadTree);
-        final EditText inputFeat = (EditText) viewInflated.findViewById(R.id.editTextFeatCount);
+        final EditText inputLat = (EditText) viewInflated.findViewById(R.id.editTextLatitude);
+        final EditText inputLng = (EditText) viewInflated.findViewById(R.id.editTextLongitude);
+        final EditText inputOID = (EditText) viewInflated.findViewById(R.id.editTextObjectID);
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String featCount = inputFeat.getText().toString().trim();
-                String layerName = input.getText().toString().trim();
-                if( (layerName.length() > 0) && (featCount.length() > 0))
+                String latitude = inputLat.getText().toString().trim();
+                String longitude = inputLng.getText().toString().trim();
+                String objectId = inputOID.getText().toString().trim();
+                if( (latitude.length() > 0) && (longitude.length() > 0) && (objectId.length() > 0))
                 {
-                    int fc = Integer.parseInt(featCount);
-                    createQuadTree(layerName, fc);
+                    int oid = Integer.parseInt(objectId);
+                    double lat = Double.parseDouble(latitude);
+                    double lng = Double.parseDouble(longitude);
+                    createQuadTreeEntity(oid, lat, lng);
                 }
                 else
-                    Toast.makeText(getApplicationContext(), "The name is required to created new QuadTree", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Lat, Lng and ObjectID  are required to created new Entity", Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog dialog = builder.create();
