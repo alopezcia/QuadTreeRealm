@@ -55,6 +55,12 @@ public class QuadTreeExtent extends RealmObject {
                 (this.maxLat <= lat ) && (this.maxLng <= lng );
     }
 
+    public boolean contains(double lng, double lat)
+    {
+        return (this.minLat >= lat  ) && (this.minLng >= lng ) &&
+                (this.maxLat <= lat ) && (this.maxLng <= lng );
+    }
+
     public double getHeight()
     {
         return Math.abs(this.maxLat-this.minLat);

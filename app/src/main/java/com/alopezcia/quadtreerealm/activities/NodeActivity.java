@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.alopezcia.quadtreerealm.R;
 import com.alopezcia.quadtreerealm.adapters.QuadTreeNodeAdapter;
-import com.alopezcia.quadtreerealm.app.QuadTreeTestApp;
 import com.alopezcia.quadtreerealm.models.QuadTree;
+import com.alopezcia.quadtreerealm.models.QuadTreeEntity;
 import com.alopezcia.quadtreerealm.models.QuadTreeNode;
 
 import io.realm.Realm;
@@ -52,17 +52,31 @@ public class NodeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view)
                 {
-                    showAlertForCreatingQuadTreeEntity("New Entity", "Type data for your new QuadTreeEntity");
+                    showAlertForCreatingQuadTreeEntity("New Entity", "Type data for your new Entity");
                 }
             });
 
-
             listView = (ListView) findViewById(R.id.listViewQuadTreeNode);
-
             adapter = new QuadTreeNodeAdapter(this, quadTreeNodes, R.layout.list_view_quadtreenode_item);
             listView.setAdapter(adapter);
 
 
+        }
+    }
+
+    /*** CRUD Actions ***/
+    private void createQuadTreeEntity(int oid, double lat, double lng )
+    {
+        if( parentNode.getExtent().contains(lng, lat))
+        {
+            realm.beginTransaction();
+            QuadTreeEntity entity = new QuadTreeEntity(lat, lng, oid);
+            realm.copyToRealm(entity);
+            parentNode.insert(entity);
+            realm.commitTransaction();
+        }else
+        {
+            Toast.makeText(getApplicationContext(), "Entity out of Node Extent", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -99,11 +113,6 @@ public class NodeActivity extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private void createQuadTreeEntity(int oid, double lat, double lng )
-    {
-        // TODO - Validate lat, lng is contained by this extent
     }
 
 }

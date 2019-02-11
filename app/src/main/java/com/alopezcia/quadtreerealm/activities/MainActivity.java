@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements RealmChangeListen
         adapter = new QuadTreeAdapter(this, quadTreeList, R.layout.list_view_quadtree_item);
         listView = (ListView) findViewById(R.id.listViewQuadTree);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
 
         fab = (FloatingActionButton) findViewById(R.id.fabAddQuadTree);
         fab.setOnClickListener(new View.OnClickListener(){
