@@ -1,12 +1,14 @@
 package com.alopezcia.quadtreerealm.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -21,7 +23,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-public class NodeActivity extends AppCompatActivity {
+public class NodeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private Realm realm;
     private FloatingActionButton fab;
     private ListView listView;
@@ -52,7 +54,9 @@ public class NodeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view)
                 {
-                    showAlertForCreatingQuadTreeEntity("New Entity", "Type data for your new Entity");
+                    // showAlertForCreatingQuadTreeEntity("New Entity", "Type data for your new Entity");
+                    Intent intent = new Intent(NodeActivity.this, MapActivity.class);
+                    startActivity(intent);
                 }
             });
 
@@ -115,4 +119,11 @@ public class NodeActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(NodeActivity.this, NodeActivity.class);
+        intent.putExtra("layerName", layerName);
+        intent.putExtra("id", quadTreeNodes.get(position).getId());
+        startActivity(intent);
+    }
 }
