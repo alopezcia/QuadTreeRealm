@@ -56,6 +56,7 @@ public class NodeActivity extends AppCompatActivity implements AdapterView.OnIte
                 {
                     // showAlertForCreatingQuadTreeEntity("New Entity", "Type data for your new Entity");
                     Intent intent = new Intent(NodeActivity.this, MapActivity.class);
+                    intent.putExtra("idExtent", parentNode.getExtent().getId());
                     startActivity(intent);
                 }
             });
@@ -63,8 +64,7 @@ public class NodeActivity extends AppCompatActivity implements AdapterView.OnIte
             listView = (ListView) findViewById(R.id.listViewQuadTreeNode);
             adapter = new QuadTreeNodeAdapter(this, quadTreeNodes, R.layout.list_view_quadtreenode_item);
             listView.setAdapter(adapter);
-
-
+            listView.setOnItemClickListener(this);
         }
     }
 

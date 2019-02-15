@@ -104,6 +104,6 @@ public class QuadTreeNode extends RealmObject {
 
     public String getTitle()
     {
-        return String.format(Locale.ENGLISH, "Nodo Id: %d - Area: %f Km2", this.id, this.extent.getAreaKm2());
+        return String.format(Locale.ENGLISH, "Nodo Id: %d - Area: %d Km2", this.id, this.extent.getAreaKm2());
     }
 }

@@ -15,11 +15,11 @@ android:paddingLeft="15dp">
     android:paddingTop="7dp">
 
     <TextView
-        android:id="@+id/textViewNodeArea"
+        android:id="@+id/textViewNodeExtent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.8"
-        android:textSize="18dp"/>
+        android:textSize="16dp"/>
     <TextView
         android:id="@+id/textViewNodeNumFeat"
         android:layout_width="0dp"
@@ -29,7 +29,7 @@ android:paddingLeft="15dp">
 </LinearLayout>
 
 <TextView
-    android:id="@+id/textViewNodeExtent"
+    android:id="@+id/textViewNodeArea"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="right"

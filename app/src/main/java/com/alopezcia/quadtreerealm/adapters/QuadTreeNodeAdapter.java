@@ -61,10 +61,12 @@ public class QuadTreeNodeAdapter extends BaseAdapter {
         QuadTreeNode qtn = list.get(position);
         QuadTreeExtent qtExtent = qtn.getExtent();
 
-        String area = qtExtent.getAreaKm2() + " Km2";
+        long areaL = qtExtent.getAreaKm2();
+        String area =  Long.toString(areaL) + " Km2";
         vh.area.setText(area);
 
         int numFeat = qtn.getEntitites().size();
+        // TODO Esto devuelve siempre 0, hay que hacer una consulta Realm.where ????
         String textForFeatNumber = (numFeat==1)? numFeat + " feature" : numFeat + " features";
         vh.featNumber.setText(textForFeatNumber);
 

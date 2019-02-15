@@ -90,22 +90,22 @@ public class QuadTreeExtent extends RealmObject {
         }
     }
 
-    public double getAreaKm2()
+    public long getAreaKm2()
     {
         double d = getDistance(this.minLat, this.minLng,this.maxLat, this.getMaxLng(), "K");
-        return d*d/2;
+        return Math.round(d*d/2);
     }
 
-    public double getAreaMiles2()
+    public long getAreaMiles2()
     {
         double d = getDistance(this.minLat, this.minLng,this.maxLat, this.getMaxLng(), "M");
-        return d*d/2;
+        return Math.round(d*d/2);
     }
 
-    public double getAreaNauticalMiles2()
+    public long getAreaNauticalMiles2()
     {
         double d = getDistance(this.minLat, this.minLng,this.maxLat, this.getMaxLng(), "N");
-        return d*d/2;
+        return Math.round(d*d/2);
     }
 
 }
